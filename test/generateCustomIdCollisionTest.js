@@ -3,8 +3,8 @@ import readline from "readline";
 import generateCustomId from "../generateCustomId.js";
 
 const segmentLength = 12; // You can change this to test different segment lengths
-const iterations = 1000000; // You can change this to test different numbers of iterations
-const ids = new Set();
+const iterations = 1_000_000; // You can change this to test different numbers of iterations
+const ids = new Set(); // !!! The maximum size of a Set in Chrome and node.js is 16,777,216 (2^24) !!!
 
 let collisions = 0;
 
