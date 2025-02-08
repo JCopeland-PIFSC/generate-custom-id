@@ -1,0 +1,24 @@
+{
+  "name": "generate-custom-id",
+  "version": "1.0.0",
+  "description": "Generates a custom identifier with a low probability of collision",
+  "main": "generateCustomId.js",
+  "type": "module",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "vitest",
+    "test:perf": "node --experimental-vm-modules test/generateCustomIdSpeedTest.js",
+    "test:coll": "node --experimental-vm-modules test/generateCustomIdCollisionTest.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^5.1.2",
+    "chai-as-promised": "^8.0.1",
+    "esm": "^3.2.25",
+    "perf_hooks": "^0.0.1",
+    "vitest": "^3.0.5"
+  }
+}
