@@ -55,7 +55,7 @@ function calculateCheckBit(id) {
  * @param {number} [options.segmentLength=12] - Length of each random segment (default: 12)
  * @param {number} [options.numSegments=1] - Number of random segments (default: 1, min: 1, max: 4)
  * @param {boolean} [options.includeDate=true] - Whether to include the date segment (default: true)
- * @param {boolean} [options.useTimestamp=false] - Whether to use a full timestamp instead of just the date (default: false)
+ * @param {boolean} [options.useTimestamp=false] - Whether to use a full timestamp instead of just the date value in UTC(default: false)
  * @param {string|null} [options.delimiter="-"] - Delimiter to use between segments (default: "-"), use null for no delimiter
  * @param {boolean} [options.lowercase=false] - Whether to use lowercase for the random segment (default: false)
  * @param {string|null} [options.postfix=null] - Optional postfix (default: null), use null to exclude postfix

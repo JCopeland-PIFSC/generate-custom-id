@@ -121,7 +121,7 @@ Creates a function that generates unique IDs with the specified configuration.
     - 4 segments: 3 to 6 characters each
   - `numSegments` (number): Number of random segments (default: 1, min: 1, max: 4)
   - `includeDate` (boolean): Whether to include the date segment (default: true)
-  - `useTimestamp` (boolean): Whether to use a full timestamp instead of just the date (default: false)
+  - `useTimestamp` (boolean): Whether to use a full timestamp instead of just the date. The time is UTC value (default: false)
   - `delimiter` (string|null): Delimiter to use between segments (default: "-"), use null for no delimiter
   - `lowercase` (boolean): Whether to use lowercase for the random segments (default: false)
   - `postfix` (string|null): Optional postfix (default: null), use null to exclude postfix
@@ -324,7 +324,7 @@ def calculate_check_bit(id: str) -> str:
     return format(sum_chars % 36, '01x').upper()
 ```
 
-### C#
+### C
 
 ```csharp
 public class IdValidator
