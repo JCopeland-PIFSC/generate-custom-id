@@ -16,7 +16,6 @@
   "license": "ISC",
   "devDependencies": {
     "chai": "^5.1.2",
-    "chai-as-promised": "^8.0.1",
     "esm": "^3.2.25",
     "perf_hooks": "^0.0.1",
     "vitest": "^3.0.5"
