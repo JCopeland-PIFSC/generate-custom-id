@@ -9,7 +9,7 @@
   },
   "scripts": {
     "test": "vitest",
-    "test:perf": "node --experimental-vm-modules test/generateCustomIdSpeedTest.js",
+    "test:perf": "node --experimental-vm-modules test/generateCustomIdPerformanceTest.js",
     "test:coll": "node --experimental-vm-modules test/generateCustomIdCollisionTest.js"
   },
   "author": "",
