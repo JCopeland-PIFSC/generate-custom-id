@@ -395,7 +395,3 @@ is_valid = validate_check_bit("USER-20250207-7KXG1L89Q2MZ-5")
 // C#
 bool isValid = IdValidator.ValidateCheckBit("USER-20250207-7KXG1L89Q2MZ-5");
 ```
-
-```
-
-```
