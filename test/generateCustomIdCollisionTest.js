@@ -2,8 +2,15 @@ import { performance } from "perf_hooks";
 import readline from "readline";
 import { generateCustomId } from "../generateCustomId.js";
 
-const segmentLength = 12; // You can change this to test different segment lengths
-const numSegments = 1; // You can change this to test different numbers of segments
+/**
+ * Valid segment options
+ * numSegments: 1, segmentLength: 8-12
+ * numSegments: 2, segmentLength: 5-10
+ * numSegments: 3, segmentLength: 4-8
+ * numSegments: 4, segmentLength: 3-6
+ */
+const segmentLength = 12; //default: 12 You can change this to test different segment lengths
+const numSegments = 1; //default: 1 You can change this to test different numbers of segments
 const iterations = 1_000_000; // You can change this to test different numbers of iterations
 const ids = new Set(); // !!! The maximum size of a Set in Chrome and node.js is 16,777,216 (2^24) !!!
 
