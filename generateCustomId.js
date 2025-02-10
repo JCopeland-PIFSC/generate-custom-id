@@ -44,38 +44,8 @@ function calculateCheckBit(id) {
  * ID Format: PREFIX-YYYYMMDD-XXXXXXXXXXXX-CHECKBIT, PREFIX-TIMESTAMP-XXXXXXXXXXXX-CHECKBIT or PREFIX-XXXXXXXXXXXX-CHECKBIT
  * Example:   CA-20250207-7KXG1L89Q2MZ-5, CA-20250207T123456-7KXG1L89Q2MZ-5 or CA-7KXG1L89Q2MZ-5
  *
- * Collision Probability:
- * The likelihood of a collision is estimated using the **birthday problem** formula:
- *
- *     P ≈ 1 - exp(-N² / (2M))
- *
- * Where:
- * - P = Probability of at least one collision
- * - N = Number of IDs generated
- * - M = Total possible unique values (36^12 for a 12-character random segment)
- * - exp = Euler's number (e ≈ 2.718)
- *
- * In a scenario where:
- * - 1,000 PWA users each generate 1,000 records (N = 1,000,000)
- * - The random segment has 36^12 possible values (≈ 4.7 × 10^18)
- *
- * The probability of a collision is **approximately 0.00001054% (1 in 9.48 million)**.
- * This ensures near-zero risk for practical applications.
- *
- * - Segment Length 8: ~16.2%
- * - Segment Length 9: ~0.492%
- * - Segment Length 10: ~0.0136%
- * - Segment Length 11: ~0.000379%
- * - Segment Length 12: ~0.0000105%
- * - Segment Length 13: ~0.000000293%
- * - Segment Length 14: ~0.00000000814%
- * - Segment Length 15: ~0.000000000226%
- *
- * To ensure a lower probability of collisions, it is advisable to enforce a minimum segment length of 10.
- * Any Segment Length below 12 should only be used for short-lived IDs,
- * very small number of instance, and scenarios where the risk of collision is acceptable.
- *
  * For multiple segments:
+ * - 1 segments: Minimum segment length of 8, maximum segment length of 15
  * - 2 segments: Minimum segment length of 5, maximum segment length of 10
  * - 3 segments: Minimum segment length of 4, maximum segment length of 8
  * - 4 segments: Minimum segment length of 3, maximum segment length of 6
