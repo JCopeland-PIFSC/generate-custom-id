@@ -241,7 +241,161 @@ Collision probabilities for different segment lengths (single segment):
 
 For practical applications, it is recommended to:
 
-- Use segment length ≥ 12 for long-term storage
-- Use segment length ≥ 10 for short-term IDs
-- Consider using multiple segments for better readability
-- Add check bits for validation when needed
+- Use segment length ≥ 12 for high volume id generation.
+- Use segment length < 10 for short-term IDs, small number of instances, and scenarios where the risk of collision is acceptable.
+- Consider using multiple segments for better readability.
+- Add check bits for validation when needed.
+
+## Backend Validation Examples (Not Validated!)
+
+If you need to validate IDs with check bits on different backend platforms, here are equivalent implementations of the `validateCheckBit` function:
+
+### node.js
+
+```javascript
+import { validateCheckBit } from "./generateCustomId.js";
+```
+
+### Java
+
+```java
+public class IdValidator {
+    public static boolean validateCheckBit(String id) {
+        String[] validDelimiters = {"-", "_", "|", ".", "#", ""};
+        String detectedDelimiter = "";
+
+        for (String delimiter : validDelimiters) {
+            if (delimiter.isEmpty() || id.contains(delimiter)) {
+                detectedDelimiter = delimiter;
+                break;
+            }
+        }
+
+        String[] parts;
+        if (!detectedDelimiter.isEmpty()) {
+            parts = id.split(Pattern.quote(detectedDelimiter));
+        } else {
+            parts = new String[]{
+                id.substring(0, id.length() - 1),
+                id.substring(id.length() - 1)
+            };
+        }
+
+        String checkBit = parts[parts.length - 1];
+        String idWithoutCheckBit = String.join(detectedDelimiter,
+            Arrays.copyOf(parts, parts.length - 1));
+
+        String calculatedCheckBit = calculateCheckBit(idWithoutCheckBit);
+        return checkBit.equals(calculatedCheckBit);
+    }
+
+    private static String calculateCheckBit(String id) {
+        int sum = id.chars().sum();
+        return Integer.toString(sum % 36, 36).toUpperCase();
+    }
+}
+```
+
+### Python
+
+```python
+def validate_check_bit(id: str) -> bool:
+    valid_delimiters = ["-", "_", "|", ".", "#", ""]
+    detected_delimiter = ""
+
+    for delimiter in valid_delimiters:
+        if delimiter == "" or delimiter in id:
+            detected_delimiter = delimiter
+            break
+
+    if detected_delimiter:
+        parts = id.split(detected_delimiter)
+    else:
+        parts = [id[:-1], id[-1]]
+
+    check_bit = parts.pop()
+    id_without_check_bit = detected_delimiter.join(parts)
+    calculated_check_bit = calculate_check_bit(id_without_check_bit)
+
+    return check_bit == calculated_check_bit
+
+def calculate_check_bit(id: str) -> str:
+    sum_chars = sum(ord(c) for c in id)
+    return format(sum_chars % 36, '01x').upper()
+```
+
+### C#
+
+```csharp
+public class IdValidator
+{
+    public static bool ValidateCheckBit(string id)
+    {
+        string[] validDelimiters = new[] { "-", "_", "|", ".", "#", "" };
+        string detectedDelimiter = "";
+
+        foreach (var delimiter in validDelimiters)
+        {
+            if (string.IsNullOrEmpty(delimiter) || id.Contains(delimiter))
+            {
+                detectedDelimiter = delimiter;
+                break;
+            }
+        }
+
+        string[] parts;
+        if (!string.IsNullOrEmpty(detectedDelimiter))
+        {
+            parts = id.Split(new[] { detectedDelimiter },
+                StringSplitOptions.None);
+        }
+        else
+        {
+            parts = new[]
+            {
+                id.Substring(0, id.Length - 1),
+                id.Substring(id.Length - 1)
+            };
+        }
+
+        string checkBit = parts[^1];
+        string idWithoutCheckBit = string.Join(detectedDelimiter,
+            parts.Take(parts.Length - 1));
+
+        string calculatedCheckBit = CalculateCheckBit(idWithoutCheckBit);
+        return checkBit == calculatedCheckBit;
+    }
+
+    private static string CalculateCheckBit(string id)
+    {
+        int sum = id.Sum(c => (int)c);
+        return Convert.ToString(sum % 36, 36).ToUpper();
+    }
+}
+```
+
+Usage examples:
+
+```javascript
+// node.js
+const isValid = validateCheckBit("USER-20250207-7KXG1L89Q2MZ-5");
+```
+
+```java
+// Java
+boolean isValid = IdValidator.validateCheckBit("USER-20250207-7KXG1L89Q2MZ-5");
+```
+
+```python
+# Python
+is_valid = validate_check_bit("USER-20250207-7KXG1L89Q2MZ-5")
+```
+
+```csharp
+// C#
+bool isValid = IdValidator.ValidateCheckBit("USER-20250207-7KXG1L89Q2MZ-5");
+```
+
+```
+
+```
