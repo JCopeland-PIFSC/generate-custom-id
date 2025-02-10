@@ -9,8 +9,8 @@ import { generateCustomId } from "../generateCustomId.js";
  * numSegments: 3, segmentLength: 4-8
  * numSegments: 4, segmentLength: 3-6
  */
-const segmentLength = 12; //default: 12 You can change this to test different segment lengths
 const numSegments = 1; //default: 1 You can change this to test different numbers of segments
+const segmentLength = 12; //default: 12 You can change this to test different segment lengths
 const iterations = 1_000_000; // You can change this to test different numbers of iterations
 const ids = new Set(); // !!! The maximum size of a Set in Chrome and node.js is 16,777,216 (2^24) !!!
 
