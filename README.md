@@ -196,6 +196,35 @@ Validates the check bit of a generated ID.
 
 - `boolean`: True if the check bit is valid, false otherwise
 
+## TypeScript Usage
+
+The package includes TypeScript definitions. To use them in your TypeScript project:
+
+```typescript
+import { generateCustomId, CustomIdOptions } from "generate-custom-id";
+
+// The options object will have type checking and autocompletion
+const options: CustomIdOptions = {
+  prefix: "TS",
+  segmentLength: 12,
+  useTimestamp: true,
+  useLocalTime: true,
+  useTwoDigitYear: true,
+  includeCheckBit: true,
+};
+
+const generateId = generateCustomId(options);
+const newId = generateId();
+console.log(newId); // Example: TS-240208-143022-7KXG1L89Q2MZ-5
+
+// TypeScript will catch invalid options
+const invalidOptions: CustomIdOptions = {
+  prefix: "TS",
+  delimiter: "+", // Error: Type '"+""' is not assignable to type '"-" | "_" | "|" | "." | "#" | null'
+  segmentLength: 12,
+};
+```
+
 ## Testing
 
 To run the test you will need to run `npm install` to install the necessary test dependencies. `vitest, chai, etc..`
@@ -439,4 +468,8 @@ is_valid = validate_check_bit("USER-20250207-7KXG1L89Q2MZ-5")
 ```csharp
 // C#
 bool isValid = IdValidator.ValidateCheckBit("USER-20250207-7KXG1L89Q2MZ-5");
+```
+
+```
+
 ```
