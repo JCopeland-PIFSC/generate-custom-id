@@ -121,7 +121,9 @@ Creates a function that generates unique IDs with the specified configuration.
     - 4 segments: 3 to 6 characters each
   - `numSegments` (number): Number of random segments (default: 1, min: 1, max: 4)
   - `includeDate` (boolean): Whether to include the date segment (default: true)
-  - `useTimestamp` (boolean): Whether to use a full timestamp instead of just the date. The time is UTC value (default: false)
+  - `useTwoDigitYear` (boolean): Whether to use a 2-digit year instead of a 4-digit year (default: false)
+  - `useTimestamp` (boolean): Whether to use a full timestamp instead of just the date value (default: false)
+  - `useLocalTime` (boolean): Whether to use local system time instead of UTC (default: false)
   - `delimiter` (string|null): Delimiter to use between segments (default: "-"), use null for no delimiter
   - `lowercase` (boolean): Whether to use lowercase for the random segments (default: false)
   - `postfix` (string|null): Optional postfix (default: null), use null to exclude postfix
@@ -137,6 +139,32 @@ Creates a function that generates unique IDs with the specified configuration.
 const generateUserId = generateCustomId({ prefix: "U", useTimestamp: true });
 const newUserId = await generateUserId();
 console.log(newUserId); // Example: U-20250207T123456-7KXG1L89Q2MZ
+```
+
+### Two-Digit Year and Local Time Examples
+
+```javascript
+// Generate ID with 2-digit year
+const generateShortYearId = generateCustomId({ useTwoDigitYear: true });
+const shortYearId = generateShortYearId();
+console.log(shortYearId); // Example: ID-240208-7KXG1L89Q2MZ
+
+// Generate ID with local time
+const generateLocalTimeId = generateCustomId({
+  useTimestamp: true,
+  useLocalTime: true,
+});
+const localTimeId = generateLocalTimeId();
+console.log(localTimeId); // Example: ID-20240208-143022-7KXG1L89Q2MZ
+
+// Combine both options
+const generateLocalShortId = generateCustomId({
+  useTwoDigitYear: true,
+  useTimestamp: true,
+  useLocalTime: true,
+});
+const localShortId = generateLocalShortId();
+console.log(localShortId); // Example: ID-240208-143022-7KXG1L89Q2MZ
 ```
 
 ### `validateCheckBit(id)`
