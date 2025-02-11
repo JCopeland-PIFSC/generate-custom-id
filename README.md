@@ -104,6 +104,23 @@ const newId = generateId();
 console.log(newId); // Example: USER_20250207T123456_7kxg1l89q2_mz89q2test_5
 ```
 
+### REPL Usage Example
+
+```bash
+ » node
+Welcome to Node.js v22.4.1.
+> const { generateCustomId, validateCheckBit } = await import("./generateCustomId.js");
+undefined
+> const genUserId = generateCustomId({ prefix: "U", useTimestamp: true, includeCheckBit: true });
+undefined
+> const newUser = genUserId();
+undefined
+> console.log(newUser);
+U-20250211-193732-PWFIJQ6GEB0Q-K
+undefined
+>
+```
+
 ## API
 
 ### `generateCustomId(options)`
