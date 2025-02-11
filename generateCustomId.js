@@ -55,7 +55,9 @@ function calculateCheckBit(id) {
  * @param {number} [options.segmentLength=12] - Length of each random segment (default: 12)
  * @param {number} [options.numSegments=1] - Number of random segments (default: 1, min: 1, max: 4)
  * @param {boolean} [options.includeDate=true] - Whether to include the date segment (default: true)
- * @param {boolean} [options.useTimestamp=false] - Whether to use a full timestamp instead of just the date value in UTC(default: false)
+ * @param {boolean} [options.useTwoDigitYear=false] - Whether to use a 2-digit year instead of a 4-digit year (default: false)
+ * @param {boolean} [options.useTimestamp=false] - Whether to use a full timestamp instead of just the date value (default: false)
+ * @param {boolean} [options.useLocalTime=false] - Whether to use local system time instead of UTC (default: false)
  * @param {string|null} [options.delimiter="-"] - Delimiter to use between segments (default: "-"), use null for no delimiter
  * @param {boolean} [options.lowercase=false] - Whether to use lowercase for the random segment (default: false)
  * @param {string|null} [options.postfix=null] - Optional postfix (default: null), use null to exclude postfix
@@ -72,7 +74,9 @@ function generateCustomId(options = {}) {
     segmentLength = 12,
     numSegments = 1,
     includeDate = true,
+    useTwoDigitYear = false,
     useTimestamp = false,
+    useLocalTime = false,
     delimiter = "-",
     lowercase = false,
     postfix = null,
@@ -124,14 +128,33 @@ function generateCustomId(options = {}) {
     throw new Error("Postfix must be a string or null");
   }
 
+  const delimiterChar = delimiter === null ? "" : delimiter;
+
   return function () {
     let dateSegment = "";
     if (includeDate) {
       const date = new Date();
       if (useTimestamp) {
-        dateSegment = date.toISOString().replace(/[-:.]/g, "").slice(0, 15); // YYYYMMDDTHHMMSS
+        const datePart = useLocalTime
+          ? date.toLocaleDateString("en-CA").replace(/-/g, "")
+          : date.toISOString().split("T")[0].replace(/-/g, "");
+        const formattedDatePart = useTwoDigitYear
+          ? datePart.slice(2) // Use last two digits of the year
+          : datePart;
+        let timePart = useLocalTime
+          ? date
+              .toLocaleTimeString("en-GB", { hour12: false }) // en-GB ensures the time format is HH:MM:SS in 24-hour format
+              .replace(/:/g, "")
+          : date.toISOString().split("T")[1].replace(/[:.Z]/g, "").slice(0, 6);
+        dateSegment = `${formattedDatePart}${delimiterChar}${timePart}`; // YYMMDD-HHMM or YYYYMMDD-HHMMSS
       } else {
-        dateSegment = date.toISOString().split("T")[0].replace(/-/g, ""); // YYYYMMDD
+        dateSegment = useLocalTime
+          ? date.toLocaleDateString("en-CA").replace(/-/g, "")
+          : date.toISOString().split("T")[0].replace(/-/g, "");
+        const formattedDateSegment = useTwoDigitYear
+          ? dateSegment.slice(2) // Use last two digits of the year
+          : dateSegment;
+        dateSegment = formattedDateSegment;
       }
     }
 
@@ -141,14 +164,14 @@ function generateCustomId(options = {}) {
       randomSegments.push(randomSegment);
     }
 
-    const delimiterChar = delimiter === null ? "" : delimiter;
     const prefixSegment = prefix === null ? "" : prefix;
+    const delimiterPrefix = prefix === null ? "" : delimiterChar;
     const postfixSegment = postfix === null ? "" : postfix;
     const randomSegmentString = randomSegments.join(delimiterChar);
 
-    let id = `${prefixSegment}${
-      includeDate ? `${delimiterChar}${dateSegment}` : ""
-    }${delimiterChar}${randomSegmentString}${
+    let id = `${prefixSegment}${delimiterPrefix}${
+      includeDate ? `${dateSegment}${delimiterChar}` : ""
+    }${randomSegmentString}${
       postfixSegment ? `${delimiterChar}${postfixSegment}` : ""
     }`;
 
