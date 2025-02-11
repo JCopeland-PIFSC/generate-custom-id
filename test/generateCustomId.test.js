@@ -63,7 +63,80 @@ describe("generateCustomId", function () {
         });
         const id = generateId();
         const regex = new RegExp(
-          `^ID-\\d{8}T\\d{6}-${Array(parseInt(numSegments))
+          `^ID-\\d{8}-\\d{6}-${Array(parseInt(numSegments))
+            .fill(`[A-Z0-9]{${length}}`)
+            .join("-")}$`
+        );
+        expect(id).to.match(regex);
+      });
+
+      it(`should generate a unique ID with ${numSegments} segment(s), segment length ${length}, and 2-digit year`, function () {
+        const generateId = generateCustomId({
+          prefix: "ID",
+          segmentLength: length,
+          numSegments: parseInt(numSegments),
+          includeDate: true,
+          useTwoDigitYear: true,
+        });
+        const id = generateId();
+        const regex = new RegExp(
+          `^ID-\\d{6}-${Array(parseInt(numSegments))
+            .fill(`[A-Z0-9]{${length}}`)
+            .join("-")}$`
+        );
+        expect(id).to.match(regex);
+      });
+
+      it(`should generate a unique ID with ${numSegments} segment(s), segment length ${length}, full timestamp, and 2-digit year`, function () {
+        const generateId = generateCustomId({
+          prefix: "ID",
+          segmentLength: length,
+          numSegments: parseInt(numSegments),
+          includeDate: true,
+          useTimestamp: true,
+          useTwoDigitYear: true,
+        });
+        const id = generateId();
+        const regex = new RegExp(
+          `^ID-\\d{6}-\\d{6}-${Array(parseInt(numSegments))
+            .fill(`[A-Z0-9]{${length}}`)
+            .join("-")}$`
+        );
+        expect(id).to.match(regex);
+      });
+
+      it(`should generate a unique ID with ${numSegments} segment(s), segment length ${length}, local time, and 2-digit year`, function () {
+        const generateId = generateCustomId({
+          prefix: "ID",
+          segmentLength: length,
+          numSegments: parseInt(numSegments),
+          includeDate: true,
+          useTimestamp: true,
+          useLocalTime: true,
+          useTwoDigitYear: true,
+        });
+        const id = generateId();
+        const regex = new RegExp(
+          `^ID-\\d{6}-\\d{6}-${Array(parseInt(numSegments))
+            .fill(`[A-Z0-9]{${length}}`)
+            .join("-")}$`
+        );
+        expect(id).to.match(regex);
+      });
+
+      it(`should generate a unique ID with ${numSegments} segment(s), segment length ${length}, full year, and local time`, function () {
+        const generateId = generateCustomId({
+          prefix: "ID",
+          segmentLength: length,
+          numSegments: parseInt(numSegments),
+          includeDate: true,
+          useTimestamp: true,
+          useLocalTime: true,
+          useTwoDigitYear: false,
+        });
+        const id = generateId();
+        const regex = new RegExp(
+          `^ID-\\d{8}-\\d{6}-${Array(parseInt(numSegments))
             .fill(`[A-Z0-9]{${length}}`)
             .join("-")}$`
         );
@@ -181,13 +254,29 @@ describe("generateCustomId", function () {
   it("should generate a unique ID with a custom prefix and options", function () {
     const generateId = generateCustomId({ prefix: "B", useTimestamp: true });
     const id = generateId();
-    expect(id).to.match(/^B-\d{8}T\d{6}-[A-Z0-9]{12}$/);
+    expect(id).to.match(/^B-\d{8}-\d{6}-[A-Z0-9]{12}$/);
+  });
+
+  it("should generate a unique ID with a custom prefix and delimiter", function () {
+    const generateId = generateCustomId({
+      prefix: "B",
+      useTimestamp: true,
+      delimiter: "_",
+    });
+    const id = generateId();
+    expect(id).to.match(/^B_\d{8}_\d{6}_[A-Z0-9]{12}$/);
   });
 
   it("should generate a unique ID with multiple segments", function () {
     const generateId = generateCustomId({ numSegments: 2, segmentLength: 5 });
     const id = generateId();
     expect(id).to.match(/^ID-\d{8}-[A-Z0-9]{5}-[A-Z0-9]{5}$/);
+  });
+
+  it("should generate a unique ID with no prefix", function () {
+    const generateId = generateCustomId({ prefix: null });
+    const id = generateId();
+    expect(id).to.match(/^\d{8}-[A-Z0-9]{12}$/);
   });
 
   it("should throw an error for invalid segment length (7)", function () {
